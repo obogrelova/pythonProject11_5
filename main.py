@@ -1,15 +1,13 @@
 import asyncio
 from aiogram import Bot, Dispatcher
-from aiogram.filters import CommandStart, Command
+from aiogram.filters import CommandStart
 from aiogram.types import Message
-from translate import Translator
 import requests
 
 from config import TOKEN, THE_API_KEY
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
-translator = Translator()
 
 
 def get_fox_types():
@@ -27,15 +25,15 @@ def get_type_info(type_name):
 
 @dp.message(CommandStart())
 async def start(message: Message):
-    await message.answer('Привет я бот помощник! Напиши мне название типа лисицы и я пришлю информацию о ней.')
+    await message.answer('Привет я бот помощник! Напиши мне название лисицы и я пришлю информацию о ней.')
 
 @dp.message(lambda message: True)
 async def send_fox_info(message: Message):
     type_name = message.text
     type_info = get_type_info(type_name)
     if type_info:
-        info_text = (f"Тип - {type_info['name']}\n"
-                    f"Описание - {type_info['characteristics']}")
+        info_text = (f"Название - {type_info['name']}\n"
+                     f"Описание - {type_info['characteristics']}")
         await message.answer(info_text)
     else:
         await message.answer('Тип не найден. Попробуйте ещё раз.')
